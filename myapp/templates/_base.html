@@ -1,0 +1,699 @@
+{% load compress %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    {% compress css %}
+        <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    {% endcompress %}
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+</head>
+<body>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000;
+        }
+
+        .top-nav {
+            background-color: black;
+        }
+
+        .nav-contain {
+            margin: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--navbar-height);
+            padding: 0 0.5rem;
+        }
+
+        .user-login, .menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu {
+            margin-left: 5rem;
+        }
+
+        .logo p {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .home-icon {
+            border-radius: 10rem;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 1rem;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+        }
+
+        .search {
+            border: none;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-items: center;
+            align-items: center;
+            border-radius: 10rem;
+            width: 450px;
+            height: 40px;
+            position: relative;
+            background-color: #333;
+        }
+
+        .search-bar i {
+            color: #fff;
+            margin: 0 0.8rem;
+        }
+
+        .search-bar input {
+            outline: none;
+            width: 90%;
+            color: #fff;
+            background-color: transparent;
+        }
+
+        .user-login {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .user-login #signIn {
+            background-color: #fff;
+            color: #000;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10rem;
+        }
+
+        .user-login #signUp {
+            color: #fff;
+            margin-right: 1.5rem;
+        }
+
+        .side-nav {
+            height: calc(100vh - var(--navbar-height));
+            width: var(--sidebar-width);
+            background-color: #222;
+            margin-right: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            padding: 1.5rem 1.5rem;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .content {
+            background-image: linear-gradient(#333, #222, #222, #222, #222, #222, #222);
+            height: calc(100vh - var(--navbar-height));
+            width: calc(100% - var(--sidebar-width));
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+            position: relative;
+        }
+
+        .lib-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 1.5rem;
+        }
+
+        .lib {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 175px;
+        }
+
+        .playlist-tools {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .playlist-search {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            position: relative;
+        }
+
+        .playlist-search input {
+            outline: none;
+            border-radius: 0.5rem;
+            width: 0;
+            opacity: 0;
+            transition: 0.3s;
+            font-size: 18px;
+            padding: 0.5rem 0.3rem;
+            left: 0;
+            position: absolute;
+        }
+
+        .playlist-search i {
+            color: #fff;
+            border-radius: 50%;
+            position: relative;
+            padding: 0.5rem;
+            font-size: 21px;
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .playlist-search i:hover {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .playlist-sort {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            width: 70px;
+            font-size: 18px;
+        }
+
+
+        .playlist {
+            list-style: none;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            width: 100%;
+            font-size: 21px;
+            font-weight: bold;
+            padding: 1rem 0;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .playlist:hover {
+            background-image: linear-gradient(90deg,#333, #444);
+            border-radius: 0.5rem;
+            padding-left: 1rem;
+            cursor: pointer;
+        }
+
+        .playlist:active {
+            background-image: linear-gradient(90deg,#222, #333);
+            border-radius: 0.5rem;
+            padding-left: 1rem;
+            cursor: pointer;
+        }
+
+        .playlist img {
+            width: 60px;
+            height: 60px;
+            border-radius: 0.3rem;
+            margin-right: 1rem;
+        }
+
+        .all-playlist-contain {
+            overflow-y: scroll;
+            height: 90%;
+        }
+
+        .all-playlist-contain::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .all-playlist-contain::-webkit-scrollbar-track {
+            background-color: #222;
+        }
+
+        .all-playlist-contain::-webkit-scrollbar-thumb {
+            background-color: #777;
+            border-radius: 3px;
+            visibility: hidden;
+        }
+
+        .all-playlist-contain::-webkit-scrollbar-thumb:hover {
+            background-color: #999;
+            border-radius: 3px;
+            visibility: visible;
+        }
+
+        .open-sort {
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .open-sort:active {
+            color: #999;
+        }
+        
+        .sort-contain {
+            background-color: #fff;
+            width: 100px;
+            font-size: 18px;
+            float: left;
+            position: absolute;
+            right: 0;
+            top: 130%;
+            opacity: 0;
+        }
+
+        .show-sort {
+            opacity: 1;
+        }
+
+        .sort-label {
+            margin: 0.5rem 0;
+            padding: 0 0.5rem;
+        }
+
+        .sort-item {
+            padding: 0.5rem;
+        }
+
+        .sort-item:hover {
+            cursor: pointer;
+            background-color: #eee;
+            padding: 0.5rem;
+        }
+
+        .added-complete {
+            background-color: #1ca300;
+            border-radius: 1rem;
+            float: left;
+            position: absolute;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 21px;
+            font-weight: bolder;
+            padding: 1rem 2rem;
+            color: #fff;
+            bottom: 10%;
+            left: 50%;
+            transition: opacity 0.4s ease, bottom 0.4s ease;
+            transform: translateX(-50%);
+            opacity: 1;
+        }
+
+        .hide-added {
+            opacity: 0;
+            bottom: 0;
+        }
+
+        .close-complete {
+            margin-left: 1rem;
+            font-size: 24px;
+        }
+
+        .close-complete:hover {
+            cursor: pointer;
+            color: #ddd
+        }
+
+        .close-complete:active {
+            scale: 0.8;
+        }
+
+        .delete-complete {
+            background-color: #fe0000;
+            border-radius: 1rem;
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 21px;
+            font-weight: bolder;
+            padding: 1rem 2rem;
+            color: #fff;
+            transition: opacity 0.5s ease, bottom 0.5s ease;
+        }
+
+        .hide-delete {
+            opacity: 0;
+            bottom: 0;
+        }
+
+        .close-delete {
+            margin-left: 1rem;
+            font-size: 24px;
+        }
+
+        .close-delete:hover {
+            cursor: pointer;
+            color: #ddd;
+        }
+
+        .close-delete:active {
+            transform: scale(0.8);
+        }
+
+        .footer-contain {
+            height: 380px;
+            width: 100%;
+            position: relative;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 36px;
+            font-weight: bolder;
+            margin: 1rem 0;
+        }
+
+        .footer-choices {
+            display: flex;
+            justify-content: space-between;
+            font-size: 24px;
+            width: 500px;
+            margin: 1rem 0;
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: space-between;
+            font-size: 36px;
+            width: 200px;
+            margin: 1rem 0;
+        }
+
+        .copyright {
+            font-size: 18px;
+            margin: 1rem 0;
+        }
+
+        @media screen and (min-width: 2000px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 20%;
+                --footer-height: 35%;
+            }
+        }
+
+        @media screen and (min-width: 1800px) and (max-width: 1999px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 23%;
+                --footer-height: 35%;
+            }
+        }
+
+        @media screen and (min-width: 1600px) and (max-width: 1799px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 26%;
+                --footer-height: 35%;
+            }
+        }
+
+        @media screen and (min-width: 1400px) and (max-width: 1599px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 29%;
+                --footer-height: 35%;
+            }
+        }
+
+        @media screen and (min-width: 1200px) and (max-width: 1399px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 35%;
+                --footer-height: 35%;
+            }
+        }
+
+        @media screen and (min-width: 1000px) and (max-width: 1199px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 40%;
+                --footer-height: 35%;
+            }
+        }
+
+        @media screen and (min-width: 800px) and (max-width: 999px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 46%;
+                --footer-height: 35%;
+            }
+        }
+
+        @media screen and (min-width: 500px) and (max-width: 799px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 50%;
+                --footer-height: 35%;
+            }
+        }
+
+        @media screen and (min-width: 200px) and (max-width: 499px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 80%;
+                --footer-height: 35%;
+            }
+        }
+
+        #allplaylist::-webkit-scrollbar-corner {
+            display: none;
+        }
+
+    </style>
+    <!-- แถบ navbar ด้านบน -->
+    <nav class="top-nav">
+        <div class="nav-contain">
+            <div class="logo">
+                <p>69Music</p>
+                <!-- <img src="" alt=""> -->
+            </div>
+            <div class="menu">
+                <a href="/" class="home-icon">
+                    <i class="fas fa-home"></i>
+                </a>
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" class="search" placeholder="What do you want to play?">
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="user-login">
+                <a href=""> 
+                    <p id="signUp">{{ user.username }}</p>
+                </a>
+                <a href="/logout">
+                    <p id="signIn">logout</p>
+                </a>
+            </div>
+            {% else %}
+            <div class="user-login">
+                <a href="/signup"> 
+                    <p id="signUp">sign up</p>
+                </a>
+                <a href="/login">
+                    <p id="signIn">sign in</p>
+                </a>
+            </div>
+            {% endif %}
+            
+        </div>
+    </nav>
+
+    <!-- ส่วนตัวเว็บที่ไม่ใช่ navbar -->
+    <div class="main-content">
+        <!-- แถบ navbar ด้านข้าง -->
+        <nav class="side-nav">
+            <!-- หัวข้อ library -->
+            {% if user.is_authenticated %}
+                <div class="lib-bar">
+                    <div class="lib">
+                        <i class="fa-solid fa-layer-group" id="lib-logo"></i>
+                        <p id="lib-item">Your Playlist</p>
+                    </div>
+                    <a href="/createplaylist" class="create-playlist-btn">
+                        <button type="submit"><i class="fa-solid fa-plus"></i></button>
+                    </a>
+                </div>
+                
+                <div class="playlist-tools">
+                    <div class="playlist-search">
+                        <i class="fa-solid fa-magnifying-glass playlist-search-icon"></i>
+                        <input type="text" class="lib-search playlist-search-input">
+                    </div>
+                    <div class="playlist-sort">
+                        <p class="sort-type">None</p>
+                        <i class="fa-solid fa-bars open-sort"></i>
+                    </div>
+                    <div class="sort-contain">
+                        <p class="sort-label">Sort by</p><hr>
+                        <ul class="sort-list">
+                            <li class="sort-item">Recents</li>
+                            <li class="sort-item">A-Z</li>
+                            <li class="sort-item">Z-A</li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <ul class="all-playlist-contain">
+                    {% block playList %}
+                    {% endblock %}
+                </ul>
+             
+             {% else %}
+                <div class="lib-bar">
+                    <div class="lib">
+                        <p id="lib-item">Sign-in for Add playlist</p>
+                    </div>
+                </div>
+             {% endif %}
+        </nav>
+
+    
+        <!-- เพลงต่างๆ -->
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+    </div>
+
+    <div class="added-complete hide-added">
+        <p class="complete-text">New Playlist Added</p>
+        <p class="fa-solid fa-xmark close-complete"></p>
+    </div>
+
+    <div class="delete-complete hide-delete">
+        <p class="delete-text">Delete Successfully</p>
+        <p class="fa-solid fa-xmark close-delete"></p>
+    </div>
+
+    <script>
+        const sidenav = document.querySelector('.side-nav')
+        const AddText = document.querySelector('.added-complete');
+        const completeText = document.querySelector('.complete-text');
+        const closeAddText = document.querySelector('.close-complete');
+        const confirmCreatePlaylist = document.querySelector('.confirm-create-btn');
+        const OpenSort = document.querySelector('.open-sort');
+        const SortContain = document.querySelector('.sort-contain');
+        const PlaylistSearchBar = document.querySelector('.playlist-search-input');
+        const PlaylistSearchIcon = document.querySelector('.playlist-search-icon');
+        const PlaylistSearchContainer = document.querySelector('.playlist-search');
+        const delText = document.querySelector('.delete-complete');
+        const closeDeleteText = document.querySelector('.close-delete');
+        const trashBtn = document.querySelector('.delete-playlist-btn');
+
+        function openSearch() {
+            PlaylistSearchBar.style.opacity = '1';
+            PlaylistSearchBar.style.width = '200px';
+            PlaylistSearchIcon.style.opacity = '0';
+        }
+
+        function closeSearch() {
+            PlaylistSearchBar.style.opacity = '0';
+            PlaylistSearchBar.style.width = '0';
+            PlaylistSearchIcon.style.opacity = '1';
+        }
+
+        function showSearch() {
+            openSearch();
+            document.addEventListener('click', handleClickOutside);
+        }
+
+        function handleClickOutside(event) {
+            if (!PlaylistSearchContainer.contains(event.target)) {
+                closeSearch();
+                document.removeEventListener('click', handleClickOutside);
+            }
+        }
+
+        function showAddedComplete(message) {
+            delText.textContent = message;
+            AddText.classList.remove('hide-added');
+            localStorage.setItem('added-complete', message);
+            startCountdown();
+        }
+
+        function closeAddedComplete() {
+            AddText.classList.add('hide-added');
+            localStorage.removeItem('added-complete');
+            clearTimeout(countdownTimer);
+        }
+
+        let countdownTimer;
+        function startCountdown() {
+            countdownTimer = setTimeout(() => {
+                closeAddedComplete();
+            }, 5000); 
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const message = localStorage.getItem('added-complete');
+            if (message) {
+                showAddedComplete(message);
+            }
+        });
+
+        PlaylistSearchIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            showSearch();
+        });
+
+        PlaylistSearchContainer.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+
+        OpenSort.addEventListener('click', () => {
+            SortContain.classList.toggle('show-sort');
+        });
+
+        closeAddText.addEventListener('click', closeAddedComplete);
+
+        confirmCreatePlaylist.addEventListener('click', () => {
+            showAddedComplete('New Playlist Added');
+        });
+
+
+    </script>
+</body>
+
+</html>

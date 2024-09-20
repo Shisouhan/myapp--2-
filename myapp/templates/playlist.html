@@ -1,0 +1,249 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}
+    69Music
+{% endblock %}
+
+{% if user.is_authenticated %}
+{% block  playList %}
+{% for playlist in playlists %}
+<a href="/detailplaylist/{{playlist.id}}">
+    <li class="playlist">
+        <div class="img">
+            <img class="bg-stone-600" src="https://icon-library.com/images/icon-music-note/icon-music-note-0.jpg">
+        </div>
+        <div class="describe">{{playlist.name}}</div>
+    </li>
+</a>
+{% endfor %}
+{% endblock %}
+{% endif %}
+
+{% block content %}
+    <style>
+        :root {
+            --navbar-height: 70px;
+            --sidebar-width: 22%;
+        }
+        .contain {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .contain::-webkit-scrollbar {
+            width: 15px;
+        }
+        .contain::-webkit-scrollbar-track {
+            background-image: linear-gradient(#333, #222, #222, #222, #222, #222, #222);
+        }
+        .contain::-webkit-scrollbar-thumb {
+            background-color: #777;
+            border-radius: 3px;
+            visibility: hidden;
+        }
+        .contain::-webkit-scrollbar-thumb:hover {
+            background-color: #999;
+            border-radius: 3px;
+            visibility: visible;
+        }
+
+        .contain::-webkit-scrollbar-corner {
+            display: none;
+        }
+
+        .filter-main {
+            position: relative;
+        }
+
+        .filter-main .filter-bar {
+            display: flex;
+            justify-content: left;
+            padding: 1.5rem;
+        }
+
+        .filter-main .main-fil-item {
+            margin: 0 0.5rem;
+            padding: 1rem 2rem;
+            background-color: #fff;
+            border-radius: 2rem;
+            font-size: 18px;
+        }
+
+        .popular-artist-contain-1, .popular-album-contain {
+            position: relative;
+            max-width: 1500px;
+        }
+
+        .artist-label-1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .artist-contain-1 {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            position: relative;
+            overflow-x: scroll;
+            white-space: nowrap;
+            margin: 2rem 1rem;
+        }
+
+        .artist-contain-1::-webkit-scrollbar {
+            display: none
+        }
+
+        .artist-list {
+            list-style: none;
+        }
+
+        .artist {
+            min-width: 235px;
+            list-style: none;
+            height: 320px;
+            margin: 0 0.3rem;
+            display: block;
+            position: relative;
+            padding: 1rem;
+        }
+
+        .artist-img {
+            background-color: #fff;
+            height: 71%;
+            border-radius: 10rem;
+            margin-bottom: 1rem;
+        }
+
+        .artist-info {
+            display: inline;
+            color: #fff;
+        }
+
+        .artist-info .artist-name{
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .artist-info .artist-describe{
+            font-size: 18px;
+        }
+
+        .album-label {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            margin-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .album-contain {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            position: relative;
+            overflow-x: scroll;
+            white-space: nowrap;
+            margin: 1rem;
+        }
+
+        .album-contain::-webkit-scrollbar {
+            display: none
+        }
+
+        .album-list {
+            list-style: none;
+        }
+
+        .album {
+            min-width: 235px;
+            list-style: none;
+            height: 320px;
+            margin: 0 0.3rem;
+            display: block;
+            position: relative;
+            padding: 2rem 1rem;
+        }
+
+        .album-img {
+            background-color: #fff;
+            height: 78%;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .album-info {
+            display: inline;
+            color: #fff;
+        }
+
+        .album-info .album-name{
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .album-info .album-describe{
+            font-size: 18px;
+        }
+
+        .artist:hover, .album:hover {
+            cursor: pointer;
+            background-image: linear-gradient(#222, #333);
+            border-radius: 1rem;
+        }
+
+        .play-button {
+            color: rgb(96, 255, 110);
+            background-color: #fff;
+            border-radius: 10rem;
+            font-size: 56px;
+            position: absolute;
+            right: 10%;
+            bottom: 10%;
+            transition: 0.1s;
+            opacity: 0;
+        }
+
+        .artist:hover .play-button, .album:hover .play-button {
+            bottom: 30%;
+            opacity: 1;
+        }
+
+        .artist-img, .album-img {
+            background-color: #fff;
+            height: 78%; /* Adjust as needed */
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensure overflow is hidden */
+            margin-bottom: 1rem;
+        }
+
+        .artist-img img, .album-img img {
+            width: 100%; /* Ensure the image covers the full width */
+            height: 100%; /* Ensure the image covers the full height */
+            object-fit: cover; /* Maintain aspect ratio, cover the container */
+            border-radius: 0.5rem; /* Ensure the image respects the border radius */
+        }
+    </style>
+    <h1 class="text-6xl text-center text-white font-bold mt-10"> {{songs.title}} - {{songs.author}}</h1>
+    <h1 class="text-6xl text-center text-white font-bold mt-10">  Add To Playlist</h1>
+    <a href="createplaylistwithsong/{{songs.id}}">
+        <h1 class=" mx-auto bg-green-500 py-3 w-1/5  hover:bg-green-600 text-2xl text-center text-black font-bold mt-10 rounded-full">New Playlist</h1>
+    </a>
+    <div class="mt-10 flex flex-col justify-center items-center">
+        {% for playlist in playlists %}
+        <li class="playlist">
+            <div class="img">
+                <img class="bg-white" src="https://icon-library.com/images/icon-music-note/icon-music-note-0.jpg">
+            </div>
+            <div class="describe">{{playlist.name}} <a href="/addtoplaylist/{{songs.id}}/{{playlist.id}}">+</a></div>
+        </li>
+        {% endfor %}
+        
+    </div>
+    
+{% endblock %}
+

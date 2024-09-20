@@ -1,0 +1,194 @@
+{% extends '_base.html' %}
+
+{% block title %}
+    Artist 1 | 69music
+{% endblock %}
+
+{% if user.is_authenticated %}
+{% block  playList %}
+{% for playlist in playlists %}
+<a href="/detailplaylist/{{playlist.id}}">
+    <li class="playlist">
+        <div class="img">
+            <img class="bg-stone-600" src="https://icon-library.com/images/icon-music-note/icon-music-note-0.jpg">
+        </div>
+        <div class="describe">{{playlist.name}}</div>
+    </li>
+</a>
+{% endfor %}
+{% endblock %}
+{% endif %}
+
+{% block content %}
+    <style>
+        .artistPage {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow-y: scroll;
+        }
+
+        .image-contain {
+            width: 100%;
+            position: relative;
+            height: 40%;
+            background-color: #fe0000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+        }
+
+        .image-contain img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .image-contain .del-alb {
+            font-size: 72px;
+        }
+
+        .artist-name {
+            font-size: 132px;
+            color: #fff;
+            font-weight: bolder;
+        }
+
+        .top-song-contain {
+            position: relative;
+            max-width: 1500px;
+            margin: 2rem;
+        }
+
+        .top-song-contain .top-song-text {
+            font-size: 36px;
+            color: #fff;
+            font-weight: bolder;
+        }
+
+        .song {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 21px;
+            color: #fff;
+        }
+
+        .song .img-name {
+            display: flex;
+            padding: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .song .song-img {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            margin-right: 2rem;
+            object-fit: cover;
+        }
+
+        .song .addTo {
+            margin: 0 2rem;
+        }
+
+        .all-album-list {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            position: relative;
+            overflow-x: scroll;
+            white-space: nowrap;
+            margin: 1rem;
+        }
+
+        .all-album-list::-webkit-scrollbar {
+            display: none
+        }
+
+        .alb-list {
+            list-style: none;
+        }
+
+        .alb {
+            min-width: 235px;
+            list-style: none;
+            height: 320px;
+            margin: 0 0.3rem;
+            display: block;
+            position: relative;
+            padding: 2rem 1rem;
+        }
+
+        .alb-img {
+            background-color: #fff;
+            width: 100%;
+            height: 260px; /* Set a fixed height */
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden; /* To ensure the image doesn't overflow */
+        }
+
+        .alb-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        .alb-info {
+            display: inline;
+            color: #fff;
+        }
+
+        .alb-info .alb-name{
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .alb-info .alb-describe{
+            font-size: 18px;
+        }
+    </style>
+
+    <div class="artistPage">
+        <div class="image-contain">
+            <p class="artist-name">{{playlist.name}}</p>
+            <div class="del-alb">
+                <a href="/deleteplaylist/{{playlist.id}}" class="">
+                    <i class="fa-solid fa-trash delete-playlist-btn"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="top-song-contain">
+            <p class="top-song-text">description</p>
+            <p class="text-white">{{playlist.description}}</p>
+            <p class="top-song-text">My song</p>
+                {% for song in playlistSong %}
+                <li class="song">
+                    <div class="img-name">
+                        <div class="song-img">
+                            <img src="{{song.song.img}}">
+                        </div>
+                        <p class="song-name">{{song.song.title}}</p>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <div class="addTo">
+                        <div class="flex flex-row">
+                            <p class="mx-10">{{song.song.duration}}</p>
+                            <a href="/delete/{{song.song.id}}/{{playlist.id}}"><h1>delete</h1></a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+        </div>
+    </div>
+    
+{% endblock %}

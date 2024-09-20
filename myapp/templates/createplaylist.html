@@ -1,0 +1,162 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}
+    69Music
+{% endblock %}
+
+{% if user.is_authenticated %}
+{% block  playList %}
+{% for playlist in playlists %}
+<a href="/detailplaylist/{{playlist.id}}">
+    <li class="playlist">
+        <div class="img">
+            <img class="bg-stone-600" src="https://icon-library.com/images/icon-music-note/icon-music-note-0.jpg">
+        </div>
+        <div class="describe">{{playlist.name}}</div>
+    </li>
+</a>
+{% endfor %}
+{% endblock %}
+{% endif %}
+
+{% block content %}
+    <style>
+        .create-playlist-contain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: calc(100vh - var(--navbar-height));
+        }
+        
+        .create-box {
+            width: 40%;
+            max-width: 1000px;
+            text-align: center;
+            padding: 3rem;
+            color: #fff;
+        }
+
+        .create-playlist-header {
+            font-size: 64px;
+        }
+
+        .name-input, .desc-input {
+            margin: 1rem;
+        }
+
+        .name-label, .desc-label {
+            font-size: 28px;
+            margin: 0.7rem 0;
+            text-align: left;
+        }
+
+        .create-input {
+            width: 100%;
+            font-size: 21px;
+            padding: 0.5rem 1rem;
+            border-radius: 0.3rem;
+        }
+
+        .confirm-create-btn {
+            margin-top: 1rem;
+            background-color: green;
+            border-radius: 0.5rem;
+            font-size: 21px;
+            padding: 0.5rem 1rem;
+        }
+
+        .confirm-create-btn:hover {
+            background-color: darkgreen;
+            border-radius: 0.5rem;
+            font-size: 21px;
+            padding: 0.5rem 1rem;
+        }
+
+        @media screen and (min-width: 2000px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 20%;
+            }
+        }
+
+        @media screen and (min-width: 1800px) and (max-width: 1999px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 23%;
+            }
+        }
+
+        @media screen and (min-width: 1600px) and (max-width: 1799px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 26%;
+            }
+        }
+
+        @media screen and (min-width: 1400px) and (max-width: 1599px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 29%;
+            }
+        }
+
+        @media screen and (min-width: 1200px) and (max-width: 1399px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 35%;
+            }
+        }
+
+        @media screen and (min-width: 1000px) and (max-width: 1199px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 40%;
+            }
+        }
+
+        @media screen and (min-width: 800px) and (max-width: 999px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 46%;
+            }
+        }
+
+        @media screen and (min-width: 500px) and (max-width: 799px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 50%;
+            }
+        }
+
+        @media screen and (min-width: 200px) and (max-width: 499px) {
+            :root {
+                --navbar-height: 70px;
+                --sidebar-width: 80%;
+            }
+        }
+
+    </style>
+    <form method="POST" action="" class="create-playlist-contain">
+    {% csrf_token %}
+        <div class="create-box">
+            <h1 class="create-playlist-header">Create Playlist</h1>
+            <div class="form-container">
+                <div class='create-playlist-label'>
+                    <div class="name-input">
+                        <p class="name-label">Playlist Name</p>
+                        <input type="text" name="name" class="create-input" placeholder="Playlist name">
+                    </div>
+                    <div class="desc-input">
+                        <p class="desc-label">Description</p>
+                        <input type="text" name="desc" class="create-input" placeholder="Description">
+                    </div>               
+                </div>
+            </div>
+            <button type="submit" class="confirm-create-btn">Create Playlist</button>
+        </div>
+    </form>
+
+{% endblock %}
+

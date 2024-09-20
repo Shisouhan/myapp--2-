@@ -1,0 +1,290 @@
+{% extends '_base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% if user.is_authenticated %}
+    {% block  playList %}
+        {% for playlist in playlists %}
+            <a href="/detailplaylist/{{playlist.id}}">
+                <li class="playlist">
+                    <div class="img">
+                        <img class="bg-stone-600" src="https://icon-library.com/images/icon-music-note/icon-music-note-0.jpg">
+                    </div>
+                    <div class="describe">{{playlist.name}}</div>
+                </li>
+            </a>
+        {% endfor %}
+    {% endblock %}
+{% endif %}
+
+{% block content %}
+    <style>
+        .detail-song-contain {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow-y: scroll;
+            color: #fff;
+        }
+
+        #box-contain {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            box-shadow: 2px 5px 5px #111111;
+            border-radius: 2rem;
+            margin: 2rem 5rem;
+            padding: 3rem;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .detail-song-header {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .detail-song-img {
+            width: 250px;
+            height: 250px;
+            background-color: #fff;
+            flex-shrink: 0;
+        }
+
+        .detail-song-name {
+            font-size: 72px;
+            margin: 0 3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .detail-source-contain {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 58%;
+        }
+
+        .detail-artist-img, .detail-alb-img {
+            width: 200px;
+            height: 200px;
+            background-color: #fff;
+            flex-shrink: 0;
+        }
+
+        .detail-artist-desc, .detail-alb-desc {
+            margin-left: 3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .detail-artist-desc .detail-artist-name, .detail-alb-desc .detail-alb-name {
+            font-size: 66px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .detail-artist-type, .detail-alb-type {
+            font-size: 36px;
+        }
+
+        .dt-art, .dt-alb {
+            display: flex;
+            align-items: center;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            box-shadow: 2px 5px 5px #111111;
+            width: 100%;
+            padding: 2rem;
+            border-radius: 2rem;
+            flex-shrink: 0;
+        }
+
+        .dt-art:hover, .dt-alb:hover {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+            cursor: pointer;
+            box-shadow: none;
+        }
+
+        .detail-song-other {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 5rem;
+        }
+
+        .detail-other-contain {
+            position: relative;
+            width: 38%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 24px;
+            overflow: hidden;
+        }
+
+        #other-box {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+            width: 100%;
+            padding: 2rem;
+            border-radius: 2rem;
+            margin: 1rem 0;
+            box-shadow: 2px 5px 5px #111111;
+            position: relative;
+        }
+
+        #other-box:hover {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+            box-shadow: none;
+            cursor: pointer;
+        }
+
+        #text-detail-header {
+            margin-bottom: 1rem;
+            font-weight: bolder;
+        }
+
+        .follow-icon {
+            font-size: 60px;
+            transition: 0.2s ease;
+            padding: 0 2rem;
+        }
+
+        .type-show {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+        }
+
+        .show-text {
+            font-size: 24px;
+            padding: 0 1rem
+        }
+
+        .show-text:hover {
+            color: greenyellow;
+        }
+
+        .follow-way {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 70px;
+        }
+
+        .follow-way p:hover {
+            font-size: 80px;
+            cursor: pointer;
+        }
+        
+
+        .footer {
+            margin-top: 2rem;
+        }
+
+        .footer-contain {
+            text-align: center;
+            color: #fff;
+        }
+
+        .footer-logo {
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .footer-item {
+            display: inline-block;
+            margin: 0 1rem;
+            cursor: pointer;
+        }
+
+        .social-item {
+            font-size: 36px;
+            margin: 0 1rem;
+            cursor: pointer;
+        }
+
+        .copyright {
+            margin-top: 1rem;
+        }
+
+    </style>
+
+    <div class="detail-song-contain">
+        <div class="detail-song-header" id="box-contain">
+            <!-- รูปเพลง -->
+             <div class="detail-song-img" id="detail-img"></div>
+             <!-- ชื่อเพลง -->
+             <p class="detail-song-name">Anoyo iki no busu</p>
+        </div>
+
+        <div class="detail-song-other">
+            <div class="detail-other-contain">
+                <div class="follow-channel" id="other-box">
+                    <p class="follow-text" id="text-detail-header">ติดตาม</p>
+                    <div class="follow-way">
+                        <a href="https://www.youtube.com/@TUYU_official"><p class="fa-brands fa-youtube follow-icon"></p></a>
+                        <a href="https://www.youtube.com/redirect?event=channel_description&redir_token=QUFFLUhqbW1BajR2TThrcks1aWZ5cnBUYUU3bDF6dXNzd3xBQ3Jtc0tuWk9VQ1F6cmpaS093R1hna2xXNUxpTDRDMGhaNjI1cmZyMlhza3h6VHlKV1BldWVBaEdEdEgtbDZGSzdoQWlkY1Y2eV9pb3RJeUlNUDFkeW1NeHhhS3JoT1JMSE13VWhma1FLcEZwWFZDRmthMVJaWQ&q=https%3A%2F%2Fopen.spotify.com%2Fartist%2F0PHf0oiic0xAnCrRuLTtHl"><p class="fa-brands fa-spotify follow-icon"></p></a>
+                        <a href="https://www.youtube.com/redirect?event=channel_description&redir_token=QUFFLUhqbjVQdTkxX19FY0k4NVlMN3A1dVFRSExPaGt0UXxBQ3Jtc0treDA5em9ydUUyN01BYURzVGhlZDM3a2hqV0hfbnRZVUp3alpFSkVxdmM3bU9USWRueC1pSFIwYTEzZ3MxTEJqSXdLRWE1dmJvNFBybm5xMzdyOUlHbUhzcVJwSEZpX1JmMDVkSkZJV3ZBTG54V2Fydw&q=https%3A%2F%2Fmusic.apple.com%2Fjp%2Fartist%2F%25E3%2583%2584%25E3%2583%25A6%2F1502338787"><p class="fa-solid fa-music follow-icon"></p></a>
+                    </div>
+                </div>
+
+                <div class="detail-song-type" id="other-box">
+                    <p class="song-type-text" id="text-detail-header">แนวเพลง</p>
+                    <div class="type-show">
+                        <p class="show-text">Jpop</p>
+                        <p class="show-text">Japannese</p>
+                    </div>
+                </div>
+
+                <div class="detail-song-history" id="other-box">
+                    <p class="history-text" id="text-detail-header">วันปล่อยเพลง</p>
+                    <p class="release-date">20-20-2020</p>
+                </div>
+            </div>
+
+            <div class="detail-source-contain">
+                <a href="/art/3">
+                    <div class="dt-art">
+                        <div class="detail-artist-img" id="detail-img"></div>
+                        <div class="detail-artist-desc">
+                            <p class="detail-artist-name">Tuyu</p>
+                            <p class="detail-artist-type">Artist</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/songInAlbum">
+                    <div class="dt-alb">
+                        <div class="detail-alb-img" id="detail-img"></div>
+                        <div class="detail-alb-desc">
+                            <p class="detail-alb-name">It's raining after all</p>
+                            <p class="detail-alb-type">Album</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="footer-contain">
+                <p class="footer-logo">69Music</p>
+                <div class="footer-choices">
+                    <p class="footer-item" id="home">Home</p>
+                    <p class="footer-item" id="about">About</p>
+                    <p class="footer-item" id="services">Services</p>
+                    <p class="footer-item" id="blog">Blog</p>
+                    <p class="footer-item" id="contact">Contact</p>
+                </div>
+                <div class="footer-social">
+                    <p class="social-item fa-brands fa-facebook" id="facebook"></p>
+                    <p class="social-item fa-brands fa-x-twitter" id="X"></p>
+                    <p class="social-item fa-brands fa-instagram" id="instagram"></p>
+                </div>
+                <p class="copyright">&#169; 2024 69Music</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

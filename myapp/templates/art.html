@@ -1,0 +1,300 @@
+{% extends '_base.html' %}
+
+{% block title %}
+    Artist 1 | 69music
+{% endblock %}
+
+{% if user.is_authenticated %}
+    {% block  playList %}
+        {% for playlist in playlists %}
+            <a href="/detailplaylist/{{playlist.id}}">
+                <div class="playlist">
+                    <div class="img">
+                        <img class="bg-stone-600" src="https://icon-library.com/images/icon-music-note/icon-music-note-0.jpg">
+                    </div>
+                    <div class="describe">{{playlist.name}}</div>
+                </div>
+            </a>
+        {% endfor %}
+    {% endblock %}
+{% endif %}
+
+{% block content %}
+    <style>
+        .artistPage {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        .image-contain {
+            width: 100%;
+            position: relative;
+            height: 40%;
+            background-color: #fe0000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-contain img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .artist-name {
+            position: absolute;
+            font-size: 132px;
+            color: #fff;
+            font-weight: bolder;
+            bottom: 5%;
+            left: 2%;
+        }
+
+        .top-song-contain {
+            position: relative;
+            max-width: 1500px;
+            margin: 2rem;
+        }
+
+        .top-song-contain .top-song-text {
+            font-size: 36px;
+            color: #fff;
+            font-weight: bolder;
+        }
+
+        .song {
+            color: #fff;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .song .img-name {
+            display: flex;
+            padding: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .song .song-img {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            margin-right: 2rem;
+            object-fit: cover;
+        }
+
+        .song .addTo {
+            margin: 0 2rem;
+        }
+
+        .addTo-con {
+            display: flex;
+        }
+
+        .all-album {
+            width: 100%;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .all-album-list {
+            display: grid;
+            grid-template-columns: repeat(5, 310px);
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .alb:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+
+        .alb:hover .play-button{
+            bottom: 30%;
+            opacity: 1;
+        }
+
+        .all-album-list::-webkit-scrollbar {
+            display: none
+        }
+
+        .alb-list {
+            list-style: none;
+        }
+
+        .alb {
+            list-style: none;
+            margin: 0 0.3rem;
+            display: block;
+            position: relative;
+            padding: 2rem 1rem;
+        }
+
+        .alb-img {
+            background-color: #fff;
+            width: 100%;
+            height: 319px;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .alb-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        .alb-info {
+            display: inline;
+            color: #fff;
+        }
+
+        .alb-info .alb-name{
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .play-button {
+            color: red;
+            background-color: #fff;
+            border-radius: 10rem;
+            font-size: 56px;
+            position: absolute;
+            right: 10%;
+            bottom: 10%;
+            transition: 0.1s;
+            opacity: 0;
+        }
+
+        .alb-info .alb-describe{
+            font-size: 18px;
+        }
+
+        .top-song-all-con {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            transition: 0.2s;
+        }
+
+        .top-song-all-con:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .top-song-table-contain {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .song-con {
+            width: 100%;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .top-song-table-contain img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .top-song-table-contain td {
+            padding: 1rem;
+        }
+
+        .top-song-contain-1, .top-song-contain-2 {
+            display: flex;
+            justify-content: left;
+            align-items: center;
+        }
+
+        .top-song-contain-1 p {
+            margin-left: 2rem;
+        }
+
+        .top-song-contain-2 {
+            color: #fff;
+            font-size: 18px;
+            width: 10%;
+        }
+
+    </style>
+
+    <div class="artistPage">
+        <div class="image-contain ">
+            <img  src={{Arts.bg}}>
+            <p class="artist-name">{{Arts.name}}</p>
+        </div>
+        
+        <div class="top-song-contain">
+            <p class="text-white">{{Arts.bio}}</p>
+            <p class="top-song-text">เพลงแนะนำ</p>
+            <div class="top-song-table-contain">
+                {% for song in songs %}
+                    <a href="/songDetail" class="song-con">
+                        <div class="top-song-all-con">
+                            <div class="top-song-contain-1">
+                                <div class="song-img">
+                                    <img src="{{song.img}}">
+                                </div>
+                                <p class="song-name">{{song.title}}</p>
+                            </div>
+                            <div class="top-song-contain-2">
+                                {% if user.is_authenticated %}
+                                    <p class="song-time">{{song.duration}}</p>
+                                    <a href="playList/{{song.id}}" class="addTobtn"><i class="fa-solid fa-plus"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="all-album">
+            <div class="all-album-list">
+                {% for album in albums %}
+                    <div class='alb'>
+                        <div class="alb-img"><img src={{album.cover_image}}></div>
+                        <div class="alb-info">
+                            <p class="alb-name">{{album.title}}</p>
+                            <p class="alb-describe">{{album.release_date}} {{album.genre}}</p>
+                        </div>
+                        <a href="/songInAlbum">
+                            <i class="fa-sharp-duotone fa-solid fa-circle-play play-button"></i>
+                        </a>
+                    </div>
+                {% endfor %}    
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-contain">
+                <p class="footer-logo">69Music</p>
+                <div class="footer-choices">
+                    <p class="footer-item" id="home">Home</p>
+                    <p class="footer-item" id="about">About</p>
+                    <p class="footer-item" id="services">Services</p>
+                    <p class="footer-item" id="blog">Blog</p>
+                    <p class="footer-item" id="contact">Contact</p>
+                </div>
+                <div class="footer-social">
+                    <p class="social-item fa-brands fa-facebook" id="facebook"></p>
+                    <p class="social-item fa-brands fa-x-twitter" id="X"></p>
+                    <p class="social-item fa-brands fa-instagram" id="instagram"></p>
+                </div>
+                <p class="copyright">&#169; 2024 69Music</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

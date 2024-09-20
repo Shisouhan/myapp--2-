@@ -1,0 +1,161 @@
+{% extends '_base.html' %}
+
+{% block title %}
+    Song In Album
+{% endblock %}
+
+{% if user.is_authenticated %}
+    {% block  playList %}
+        {% for playlist in playlists %}
+            <a href="/detailplaylist/{{playlist.id}}">
+                <li class="playlist">
+                    <div class="img">
+                        <img class="bg-stone-600" src="https://icon-library.com/images/icon-music-note/icon-music-note-0.jpg">
+                    </div>
+                    <div class="describe">{{playlist.name}}</div>
+                </li>
+            </a>
+        {% endfor %}
+    {% endblock %}
+{% endif %}
+
+
+{% block content %}
+
+    <style>
+        :root {
+            --alb-banner-height: 180px;
+        }
+
+        .song-alb-page-contain {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow-y: scroll;
+        }
+
+        .alb-header-banner {
+            width: 100%;
+            background-image: linear-gradient(#1c4587,#073763);
+            position: relative;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+        }
+
+        .alb-img-banner {
+            width: 140px;
+            height: 140px;
+            background-color: #fff;
+            margin: 1rem
+        }
+        
+        .alb-banner-text {
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            position: relative;
+            color: #fff;
+            justify-content: center;
+            padding: 0 0.5rem;
+        }
+
+        .alb-text {
+            font-size: 14px;
+        }
+
+        .alb-name {
+            font-size: 64px;
+            font-weight: bolder;
+        }
+
+        .alb-desc {
+            display: flex;
+            font-size: 15px;
+        }
+
+        .alb-desc p {
+            padding: 0 0.3rem;
+        }
+
+        .alb-all-song {
+            color: #fff;
+            padding: 1rem;
+        }
+
+        .alb-song-table {
+            width: 100%;
+        }
+
+        .alb-song-table td, .alb-song-table th {
+            padding: 1rem;
+        }
+
+
+
+    </style>
+
+    <div class="song-alb-page-contain">
+        <div class="alb-header-banner">
+        <!-- ใช้ tag img แทน ลบ div class="alb-img-banner" -->
+        <!-- <img src="" alt="" class="alb-img-banner"> -->
+            <div class="alb-img-banner"></div> 
+            <div class="alb-banner-text">
+                <p class="alb-text">Album</p>
+                <p class="alb-name">ชื่ออัลบั้ม</p>
+                <div class="alb-desc">
+                    <p class="alb-artist">ชื่อศิลปิน</p>
+                    <p class="alb-year-release">ปีที่ปล่อยอัลบั้ม</p>
+                    <p class="alb-amount">จน.เพลงในเพลลิส</p>
+                    <p class="alb-sum-time">เวลารวมทั้งหมด</p>
+                </div>
+            </div>
+        </div>
+        <div class="hide-header"> </div>
+
+        <div class="alb-tools"></div>
+        <div class="alb-all-song">
+            <table class="alb-song-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th style="width:90%; text-align: left;">Title</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for num in number %}
+                        <tr class="alb-table-item">
+                            <td class="song-no text-center">{{num}}</td>
+                            <td class="song-name-contain">
+                                <p class="song-name">Song {{num}}</p>
+                                <p class="song-artist">Artist</p>
+                            </td>
+                            <td class="song-duration text-center">1:00</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table> 
+        </div>
+        <div class="footer">
+            <div class="footer-contain">
+                <p class="footer-logo">69Music</p>
+                <div class="footer-choices">
+                    <p class="footer-item" id="home">Home</p>
+                    <p class="footer-item" id="about">About</p>
+                    <p class="footer-item" id="services">Services</p>
+                    <p class="footer-item" id="blog">Blog</p>
+                    <p class="footer-item" id="contact">Contact</p>
+                </div>
+                <div class="footer-social">
+                    <p class="social-item fa-brands fa-facebook" id="facebook"></p>
+                    <p class="social-item fa-brands fa-x-twitter" id="X"></p>
+                    <p class="social-item fa-brands fa-instagram" id="instagram"></p>
+                </div>
+                <p class="copyright">&#169; 2024 69Music</p>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
